@@ -1,0 +1,786 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{microtype}
+
+\tcbuselibrary{skins, breakable, theorems}
+
+% Colors
+\definecolor{infoBlue}{RGB}{24,95,165}
+\definecolor{infoBg}{RGB}{230,241,251}
+\definecolor{successGreen}{RGB}{8,80,65}
+\definecolor{successBg}{RGB}{225,245,238}
+\definecolor{warnOrange}{RGB}{99,56,6}
+\definecolor{warnBg}{RGB}{250,238,218}
+\definecolor{dangerRed}{RGB}{121,31,31}
+\definecolor{dangerBg}{RGB}{252,235,235}
+\definecolor{purpleText}{RGB}{83,74,183}
+\definecolor{purpleBg}{RGB}{238,237,254}
+\definecolor{sectionGray}{RGB}{70,70,70}
+\definecolor{ruleGray}{RGB}{200,200,200}
+
+% Box styles
+\tcbset{
+  infobox/.style={
+    colback=infoBg, colframe=infoBlue, coltitle=infoBlue,
+    fonttitle=\bfseries\small, left=6pt, right=6pt, top=4pt, bottom=4pt,
+    breakable, boxrule=0.5pt, arc=4pt
+  },
+  successbox/.style={
+    colback=successBg, colframe=successGreen, coltitle=successGreen,
+    fonttitle=\bfseries\small, left=6pt, right=6pt, top=4pt, bottom=4pt,
+    breakable, boxrule=0.5pt, arc=4pt
+  },
+  warnbox/.style={
+    colback=warnBg, colframe=warnOrange, coltitle=warnOrange,
+    fonttitle=\bfseries\small, left=6pt, right=6pt, top=4pt, bottom=4pt,
+    breakable, boxrule=0.5pt, arc=4pt
+  },
+  dangerbox/.style={
+    colback=dangerBg, colframe=dangerRed, coltitle=dangerRed,
+    fonttitle=\bfseries\small, left=6pt, right=6pt, top=4pt, bottom=4pt,
+    breakable, boxrule=0.5pt, arc=4pt
+  },
+  formulabox/.style={
+    colback=gray!8, colframe=gray!30,
+    left=8pt, right=8pt, top=5pt, bottom=5pt,
+    breakable, boxrule=0.5pt, arc=4pt,
+    fontupper=\small
+  },
+  questionbox/.style={
+    colback=purpleBg, colframe=purpleText,
+    left=8pt, right=8pt, top=6pt, bottom=6pt,
+    boxrule=0.8pt, arc=4pt,
+    fonttitle=\bfseries, coltitle=purpleText,
+    breakable
+  }
+}
+
+% Section formatting
+\titleformat{\section}{\large\bfseries\color{sectionGray}}{}{0em}{}[\vspace{-4pt}\rule{\linewidth}{0.4pt}]
+\titleformat{\subsection}{\normalsize\bfseries\color{sectionGray}}{Q\thesubsection.\ }{0em}{}
+\titleformat{\subsubsection}{\small\bfseries\itshape\color{sectionGray}}{\thesubsubsection.\ }{0em}{}
+
+% Header/footer
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\small MATH 3032 --- Chapter 3 Exam Prep}
+\lhead{\small \textit{Matthew Setiadi $\cdot$ Temple University}}
+\rfoot{\small \thepage}
+\lfoot{\small \texttt{github.com/matthewsetiadi} $\cdot$ CC BY 4.0}
+\renewcommand{\headrulewidth}{0.3pt}
+
+% Math shortcuts
+\newcommand{\thetahat}{\hat{\theta}_{\text{MLE}}}
+\newcommand{\iid}{\overset{\text{iid}}{\sim}}
+\newcommand{\pd}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Bias}{\operatorname{Bias}}
+\newcommand{\MSE}{\operatorname{MSE}}
+\newcommand{\xn}{X_1, \ldots, X_n}
+\newcommand{\convp}{\xrightarrow{\,p\,}}
+\newcommand{\convd}{\xrightarrow{\,d\,}}
+
+\hypersetup{
+  colorlinks=true, linkcolor=infoBlue, urlcolor=infoBlue,
+  pdftitle={MATH 3032 Chapter 3 Exam Prep},
+  pdfauthor={Matthew Setiadi}
+}
+
+% ============================================================
+\begin{document}
+% ============================================================
+
+\begin{titlepage}
+  \begin{center}
+    \vspace*{2cm}
+
+    {\LARGE\bfseries MATH 3032 --- Mathematical Statistics}\\[10pt]
+    \rule{\linewidth}{1pt}\\[8pt]
+    {\huge\bfseries Chapter 3: Point Estimation}\\[6pt]
+    {\Large Complete Exam Preparation Guide}\\[8pt]
+    \rule{\linewidth}{1pt}
+
+    \vspace{1.5cm}
+
+    {\large All 8 Exam Questions $\cdot$ Worked Examples $\cdot$ Practice Problems $\cdot$ Mock Exam}
+
+    \vspace{2cm}
+
+    \begin{tcolorbox}[formulabox, width=0.72\textwidth, halign=center]
+      \centering
+      \textbf{Topics covered}\\[6pt]
+      \begin{tabular}{ll}
+        Q1 & Likelihood function $L(\theta)$ \\
+        Q2 & MLE $\hat\theta$ + second derivative test \\
+        Q3 & Bias via $\mathbb{E}[X_1]$ and u-substitution \\
+        Q4 & Mean Squared Error \\
+        Q5 & Consistency (LLN and Chebyshev) \\
+        Q6 & Fisher information $I(\theta)$ \\
+        Q7 & Cram\'{e}r-Rao lower bound \\
+        Q8 & Asymptotic normality \\
+      \end{tabular}
+    \end{tcolorbox}
+
+    \vspace{2cm}
+
+    {\large\bfseries Matthew Setiadi}\\[4pt]
+    {\normalsize Accelerated B.S./M.S.\ Computational Data Science}\\[2pt]
+    {\normalsize Temple University}\\[2pt]
+    {\normalsize\color{sectionGray} \today}
+
+    \vspace{2cm}
+
+    \begin{tcolorbox}[infobox, width=0.72\textwidth]
+      \small\textbf{Textbooks:} \\
+      Panaretos, \textit{Statistics for Mathematicians} (Ch.\ 3)\\
+      Hogg, Tanis \& Zimmerman, \textit{Probability and Statistical Inference}, 9th ed.\ (\S6.4, \S6.6)
+    \end{tcolorbox}
+
+    \vfill
+
+    \begin{tcolorbox}[successbox, width=0.72\textwidth]
+      \small\centering
+      Open-source study notes --- free to use, share, and adapt.\\
+      \texttt{github.com/matthewsetiadi} \quad $\cdot$ \quad Released under CC BY 4.0
+    \end{tcolorbox}
+
+  \end{center}
+\end{titlepage}
+
+\begin{center}
+  {\LARGE\bfseries MATH 3032 --- Mathematical Statistics}\\[6pt]
+  {\large Chapter 3: Point Estimation --- Complete Exam Prep}\\[4pt]
+  {\normalsize\color{sectionGray} All 8 Exam Questions $\cdot$ Worked Examples $\cdot$ Practice Problems $\cdot$ Mock Exam}\\[6pt]
+  \rule{\linewidth}{0.8pt}
+\end{center}
+
+\vspace{4pt}
+
+\begin{tcolorbox}[formulabox, title={}]
+\textbf{Textbooks:} Panaretos, \textit{Statistics for Mathematicians} (Ch.\ 3) \quad\&\quad Hogg--Tanis--Zimmerman, \textit{Probability and Statistical Inference}, 9th ed.\ (§6.4, §6.6)\\[4pt]
+\textbf{Exam structure:} 8 questions on a single continuous pdf, 30 points total. Questions 1--2 are $\approx\!\tfrac{1}{3}$ of points; Questions 3--5 are $\approx\!\tfrac{1}{3}$; Questions 6--8 are $\approx\!\tfrac{1}{3}$.
+\end{tcolorbox}
+
+\tableofcontents
+\newpage
+
+% ==============================================================
+\section{The Statistical Framework}
+% ==============================================================
+
+Let $\xn \iid F_\theta$ with pdf $f(x;\theta)$, $\theta \in \Theta \subset \mathbb{R}$ unknown. The goal of Chapter 3 is to:
+\begin{enumerate}[leftmargin=2em]
+  \item Construct an estimator $\hat\theta$ — a function of the sample that approximates $\theta$.
+  \item Analyse its quality: bias, mean squared error, consistency.
+  \item Assess optimality: does $\hat\theta$ achieve the Cramér-Rao lower bound?
+  \item Describe its large-sample distribution.
+\end{enumerate}
+
+\begin{tcolorbox}[infobox, title={Formula Sheet (provided on exam)}]
+\begin{align*}
+\int_0^\infty e^{-u}\,du &= 1, \qquad
+\int_0^\infty u\,e^{-u}\,du = 1, \qquad
+\int_0^\infty u^2 e^{-u}\,du = 2\\
+\int_0^\infty u^3 e^{-u}\,du &= 6, \qquad
+\int_0^\infty u^4 e^{-u}\,du = 24, \qquad
+\int_0^\infty u^n e^{-u}\,du = n!
+\end{align*}
+Also: $\Var(X) = \E[X^2]-(\E[X])^2$; $\Var(aX)=a^2\Var(X)$; $\Var(\sum X_i) = n\Var(X_1)$ if i.i.d.
+\end{tcolorbox}
+
+% ==============================================================
+\section{The Eight Exam Questions — Theory}
+% ==============================================================
+
+\subsection{Likelihood Function $L(\theta)$}
+
+\begin{tcolorbox}[questionbox, title={Question 1}]
+Given a pdf $f(x;\theta)$, write the likelihood function $L(\theta)$ for an i.i.d.\ sample $\xn$ and simplify.
+\end{tcolorbox}
+
+\textbf{Definition.} The likelihood function is the joint pdf of the sample, viewed as a function of $\theta$:
+\[
+  L(\theta) = \prod_{i=1}^n f(X_i;\theta).
+\]
+Since the samples are i.i.d., the joint pdf factors into a product of marginals. The key simplification steps are:
+
+\begin{enumerate}[leftmargin=2em]
+  \item Write out all $n$ factors explicitly.
+  \item Group \textbf{constants} (terms involving only $\theta$): $\prod c(\theta) = c(\theta)^n$.
+  \item Group \textbf{data terms} (products of functions of $X_i$): $\prod g(X_i)$.
+  \item \textbf{Collapse exponentials}: $\prod e^{h(X_i,\theta)} = \exp\!\bigl(\sum h(X_i,\theta)\bigr)$.
+\end{enumerate}
+
+\begin{tcolorbox}[warnbox, title={Critical point}]
+Always identify the \emph{exponent's structure} in $f(x;\theta)$ first. If the exponent is $-x/\theta$, then $L$ will contain $e^{-\sum X_i/\theta}$. If the exponent is $-x^2/\theta^2$, then $L$ will contain $e^{-\sum X_i^2/\theta^2}$. This exponent determines which sufficient statistic appears in $\hat\theta$.
+\end{tcolorbox}
+
+\textbf{Review-session worked example.} Let $f(x;\theta) = \frac{x^2 e^{-x/\theta}}{2\theta^3}$, $x>0$. Then:
+\[
+  L(\theta) = \prod_{i=1}^n \frac{X_i^2\,e^{-X_i/\theta}}{2\theta^3}
+  = \underbrace{\frac{1}{(2\theta^3)^n}}_{\text{constant}^n}
+    \cdot \underbrace{\prod_{i=1}^n X_i^2}_{\text{data}}
+    \cdot \underbrace{\exp\!\Bigl(-\frac{\sum X_i}{\theta}\Bigr)}_{\text{collapsed exp.}}
+\]
+
+\subsection{Maximum Likelihood Estimator $\hat\theta$}
+
+\begin{tcolorbox}[questionbox, title={Question 2}]
+Find $\hat\theta_{\text{MLE}} = \arg\max_\theta L(\theta)$. \textbf{Justify that it is a maximum} using the second derivative test.
+\end{tcolorbox}
+
+\textbf{Method.}
+\begin{enumerate}[leftmargin=2em]
+  \item Take the \textbf{log-likelihood} $\ell(\theta) = \log L(\theta)$. Since $\log$ is strictly increasing, $\arg\max L = \arg\max \ell$.
+  \item \textbf{Differentiate} $\ell(\theta)$ w.r.t.\ $\theta$ and set $\ell'(\theta)=0$ (score equation).
+  \item \textbf{Solve} for $\hat\theta$.
+  \item \textbf{Second derivative test}: evaluate $\ell''(\hat\theta)$. If $\ell''(\hat\theta)<0$, then $\hat\theta$ is a local maximum.
+\end{enumerate}
+
+\begin{tcolorbox}[infobox, title={The substitution trick for the second derivative test}]
+After finding $\hat\theta$, the score equation $\ell'(\hat\theta)=0$ gives a relation of the form
+$\sum(\text{data}) = n \cdot g(\hat\theta)$ for some function $g$. Substitute this into $\ell''(\hat\theta)$ to simplify the expression and determine its sign without knowing the data values explicitly.
+\end{tcolorbox}
+
+\textbf{Review-session worked example.} Continuing from Q1:
+\begin{align*}
+  \ell(\theta) &= -n\log(2\theta^3) + 2\sum\log X_i - \frac{\sum X_i}{\theta}\\
+  \ell'(\theta) &= -\frac{3n}{\theta} + \frac{\sum X_i}{\theta^2} = 0
+  \quad\Longrightarrow\quad \hat\theta = \frac{\sum X_i}{3n} = \frac{\bar X}{3}.
+\end{align*}
+\textbf{Second derivative test:}
+\[
+  \ell''(\theta) = \frac{3n}{\theta^2} - \frac{2\sum X_i}{\theta^3}.
+\]
+From the score equation: $\sum X_i = 3n\hat\theta$. Substituting:
+\[
+  \ell''(\hat\theta) = \frac{3n}{\hat\theta^2} - \frac{2 \cdot 3n\hat\theta}{\hat\theta^3}
+  = \frac{3n}{\hat\theta^2} - \frac{6n}{\hat\theta^2} = -\frac{3n}{\hat\theta^2} < 0. \quad \checkmark
+\]
+
+\subsection{Bias of $\hat\theta$}
+
+\begin{tcolorbox}[questionbox, title={Question 3}]
+Compute $\Bias(\hat\theta,\theta) = \E[\hat\theta] - \theta$. This requires evaluating $\E[X_1]$ by integration.
+\end{tcolorbox}
+
+\textbf{Method.}
+\begin{enumerate}[leftmargin=2em]
+  \item Use \textbf{linearity} to reduce $\E[\hat\theta]$ to $\E[X_1]$: e.g.\ if $\hat\theta = \frac{1}{cn}\sum X_i$, then $\E[\hat\theta] = \frac{\E[X_1]}{c}$.
+  \item Compute $\E[X_1] = \int_0^\infty x\,f(x;\theta)\,dx$ via \textbf{u-substitution} $u = x/\theta$ (or $u=x^2/\theta^2$ for Weibull-type pdfs).
+  \item Apply the gamma integral formula from the formula sheet.
+  \item Compute $\Bias = \E[\hat\theta] - \theta$.
+\end{enumerate}
+
+\textbf{Review-session worked example.} With $f(x;\theta)=\frac{x^2 e^{-x/\theta}}{2\theta^3}$ and $\hat\theta = \bar X/3$:
+\[
+  \E[X_1] = \int_0^\infty x \cdot \frac{x^2 e^{-x/\theta}}{2\theta^3}\,dx
+  = \frac{1}{2\theta^3}\int_0^\infty x^3 e^{-x/\theta}\,dx.
+\]
+Substitute $u = x/\theta$, so $x = \theta u$, $dx = \theta\,du$:
+\[
+  = \frac{1}{2\theta^3} \cdot \theta^4 \int_0^\infty u^3 e^{-u}\,du
+  = \frac{\theta}{2} \cdot 3! = \frac{\theta}{2}\cdot 6 = 3\theta.
+\]
+Therefore $\E[\hat\theta] = \frac{3\theta}{3} = \theta$, so $\Bias(\hat\theta,\theta) = 0$. $\hat\theta$ is \textbf{unbiased}.
+
+\begin{tcolorbox}[infobox, title={The gamma integral pattern}]
+For Gamma-type pdfs with pdf $\propto x^{\alpha-1}e^{-x/\theta}$: the integral $\E[X_1]$ uses the $(n=\alpha)$ row of the table, and $\E[X_1^2]$ uses the $(n=\alpha+1)$ row. In general, $\E[X_1^k]$ uses row $n = \alpha+k-1$, giving value $(\alpha+k-1)!\,$. For Weibull-type pdfs with $e^{-x^2/\theta^2}$ in the exponent, use $u = x^2/\theta^2$ instead.
+\end{tcolorbox}
+
+\subsection{Mean Squared Error}
+
+\begin{tcolorbox}[questionbox, title={Question 4}]
+Compute $\MSE(\hat\theta,\theta) = \E[(\hat\theta-\theta)^2]$.
+\end{tcolorbox}
+
+\textbf{Decomposition (Panaretos Remark 3.5):}
+\[
+  \MSE(\hat\theta,\theta) = \Bias(\hat\theta,\theta)^2 + \Var(\hat\theta).
+\]
+If $\Bias = 0$, then $\MSE = \Var(\hat\theta)$.
+
+\textbf{Method for computing $\Var(\hat\theta)$:}
+\begin{enumerate}[leftmargin=2em]
+  \item Pull the constant out squared: $\Var\!\bigl(\tfrac{1}{cn}\sum X_i\bigr) = \frac{1}{c^2 n^2}\cdot n\Var(X_1) = \frac{\Var(X_1)}{c^2 n}$.
+  \item Compute $\Var(X_1) = \E[X_1^2] - (\E[X_1])^2$.
+  \item $\E[X_1^2]$ requires the same u-substitution, using the next row of the gamma table.
+\end{enumerate}
+
+\begin{tcolorbox}[warnbox, title={The $n$ in the denominator check}]
+The professor's explicit rule: your MSE \emph{must} have $n$ in the denominator. If it doesn't, you dropped the $n$ somewhere in the variance-of-sum step: $\Var(\sum X_i) = n\Var(X_1)$, so $\Var(\hat\theta) = \Var(X_1)/(c^2 n)$, not $\Var(X_1)/c^2$.
+\end{tcolorbox}
+
+\textbf{Review-session worked example.} With $\E[X_1]=3\theta$:
+\begin{align*}
+  \E[X_1^2] &= \frac{1}{2\theta^3}\int_0^\infty x^4 e^{-x/\theta}\,dx
+  = \frac{\theta^2}{2}\int_0^\infty u^4 e^{-u}\,du = \frac{\theta^2}{2}\cdot 4! = \frac{\theta^2}{2}\cdot 24 = 12\theta^2.\\
+  \Var(X_1) &= 12\theta^2 - (3\theta)^2 = 12\theta^2 - 9\theta^2 = 3\theta^2.\\
+  \Var(\hat\theta) &= \frac{1}{(3n)^2}\cdot n \cdot 3\theta^2 = \frac{3n\theta^2}{9n^2} = \frac{\theta^2}{3n}.\\
+  \MSE(\hat\theta,\theta) &= 0 + \frac{\theta^2}{3n} = \boxed{\dfrac{\theta^2}{3n}}.
+\end{align*}
+
+\subsection{Consistency}
+
+\begin{tcolorbox}[questionbox, title={Question 5}]
+Show that $\hat\theta \convp \theta$ as $n\to\infty$.
+\end{tcolorbox}
+
+There are two approaches; choose based on $\hat\theta$'s structure.
+
+\textbf{Approach 1 — Law of Large Numbers.} If $\hat\theta = \frac{1}{n}\sum g(X_i)$:
+\begin{align*}
+  \text{By LLN:}\quad \frac{1}{n}\sum g(X_i) &\convp \E[g(X_1)] = \theta. \quad\checkmark
+\end{align*}
+Requires: $\E[|g(X_1)|] < \infty$ (verified since we computed $\E[X_1] < \infty$).
+
+\textbf{Approach 2 — Chebyshev inequality.} Always valid when MSE is computed:
+\[
+  P(|\hat\theta - \theta| \geq \varepsilon) \leq \frac{\MSE(\hat\theta,\theta)}{\varepsilon^2} = \frac{\theta^2}{3n\varepsilon^2} \to 0 \text{ as } n\to\infty.
+\]
+By the squeeze theorem, $\hat\theta \convp \theta$. $\checkmark$
+
+\begin{tcolorbox}[infobox, title={When to use each approach}]
+\textbf{LLN:} use when $\hat\theta$ is visibly $(1/n)\sum g(X_i)$. Cleaner write-up.\\
+\textbf{Chebyshev:} universal fallback — use whenever MSE is already computed (i.e.\ Q4 is done). Also handles cases where $\hat\theta$ is not a simple average (e.g.\ $\hat\theta = \sqrt{\sum X_i^2/n}$).\\
+\textbf{Key insight (Panaretos Remark 3.8):} $\MSE(\hat\theta,\theta)\to 0 \Rightarrow \hat\theta\convp\theta$.
+\end{tcolorbox}
+
+\subsection{Fisher Information $I(\theta)$}
+
+\begin{tcolorbox}[questionbox, title={Question 6}]
+Compute $I(\theta) = \E_\theta\!\left[\left(\pd{}{\theta}\log f(X_1;\theta)\right)^2\right]$.
+\end{tcolorbox}
+
+\textbf{Method.}
+\begin{enumerate}[leftmargin=2em]
+  \item Compute $\log f(x;\theta)$ — this is the $n=1$ case of the log-likelihood.
+  \item Differentiate in $\theta$ to get the \textbf{score} $s(\theta) = \pd{}{\theta}\log f(X_1;\theta)$.
+  \item Compute $I(\theta) = \E[s(\theta)^2]$.
+\end{enumerate}
+
+\begin{tcolorbox}[successbox, title={The variance shortcut (saves time on exam)}]
+Under regularity conditions, $\E[s(\theta)] = 0$, so $I(\theta) = \E[s^2] = \Var(s)$. If the score takes the form
+\[
+  s(\theta) = \frac{X_1 - \E[X_1]}{c(\theta)},
+\]
+then immediately $I(\theta) = \Var(X_1)/c(\theta)^2$ — no new integrals needed. This pattern appears whenever the log-likelihood is linear in $X_1$.
+\end{tcolorbox}
+
+\textbf{Alternative formula (negative second derivative):}
+\[
+  I(\theta) = -\E\!\left[\pd{^2}{\theta^2}\log f(X_1;\theta)\right].
+\]
+
+\textbf{Review-session worked example.}
+\[
+  \log f = -\log(2\theta^3) + 2\log X_1 - \frac{X_1}{\theta}, \qquad
+  s(\theta) = \frac{X_1}{\theta^2} - \frac{3}{\theta} = \frac{X_1 - 3\theta}{\theta^2}.
+\]
+Since $\E[X_1]=3\theta$, the score is $s(\theta) = (X_1 - \E[X_1])/\theta^2$. Therefore:
+\[
+  I(\theta) = \frac{\Var(X_1)}{\theta^4} = \frac{3\theta^2}{\theta^4} = \frac{3}{\theta^2}.
+\]
+
+\subsection{Cramér-Rao Lower Bound}
+
+\begin{tcolorbox}[questionbox, title={Question 7}]
+Does $\hat\theta_{\text{MLE}}$ attain the Cramér-Rao lower bound?
+\end{tcolorbox}
+
+\textbf{Theorem 3.9 (Cramér-Rao, Panaretos).} Let $T$ be any estimator with bias $\beta(\theta) = \E[T]-\theta$. Under regularity conditions:
+\[
+  \Var(T) \geq \frac{(1+\beta'(\theta))^2}{n\cdot I(\theta)}.
+\]
+For \textbf{unbiased} estimators ($\beta=0$, $\beta'=0$):
+\[
+  \Var(T) \geq \frac{1}{n\cdot I(\theta)} =: \text{CRLB}.
+\]
+For estimating a function $g(\theta)$ (e.g.\ $g(\theta)=\theta^2$):
+\[
+  \Var(T) \geq \frac{[g'(\theta)]^2}{n\cdot I(\theta)}.
+\]
+
+\textbf{Review-session worked example.}
+\[
+  \text{CRLB} = \frac{1}{n\cdot I(\theta)} = \frac{1}{n\cdot 3/\theta^2} = \frac{\theta^2}{3n}.
+\]
+Since $\Var(\hat\theta) = \frac{\theta^2}{3n} = \text{CRLB}$, the MLE \textbf{attains the Cramér-Rao bound}. Therefore $\hat\theta$ is the UMVUE — no unbiased estimator has smaller variance.
+
+\begin{tcolorbox}[warnbox, title={When the bound is NOT attained — Uniform$(0,\theta)$}]
+For $f(x;\theta)=1/\theta$, $0<x<\theta$: the support depends on $\theta$, violating a regularity condition. The score $s(\theta)=-1/\theta$ contains no $X_1$, so $\E[s]\neq 0$. The MLE is $\hat\theta=X_{(n)}=\max(X_1,\ldots,X_n)$, which is biased: $\E[X_{(n)}]=n\theta/(n+1)$. The bias-corrected estimator $T^*=\frac{n+1}{n}X_{(n)}$ has $\Var(T^*)=\theta^2/(n(n+2))$, which is \emph{strictly less than} the formal CRLB $\theta^2/n$ — demonstrating that the bound is invalid for this model.
+\end{tcolorbox}
+
+\subsection{Asymptotic Normality}
+
+\begin{tcolorbox}[questionbox, title={Question 8}]
+Find $\sigma$ such that $\dfrac{\sqrt{n}}{\sigma}\,(\hat\theta - \theta) \convd N(0,1)$.
+\end{tcolorbox}
+
+\textbf{Approach 1 — Classical CLT.} If $\hat\theta = \frac{1}{n}\sum g(X_i)$:
+\[
+  \frac{\sqrt{n}\,(\hat\theta - \theta)}{\sqrt{\Var(g(X_1))}} \convd N(0,1),
+  \qquad \sigma = \sqrt{\Var(g(X_1))}.
+\]
+
+\textbf{Approach 2 — MLE CLT (Panaretos §3.3.3).} For any regular MLE:
+\[
+  \sqrt{n\cdot I(\theta)}\,(\hat\theta - \theta) \convd N(0,1),
+  \qquad \sigma = \frac{1}{\sqrt{I(\theta)}}.
+\]
+
+\begin{tcolorbox}[successbox, title={Why both approaches give the same $\sigma$ when the CR bound is attained}]
+Both give $\sigma^2 = 1/I(\theta)$, and both equal $\Var(g(X_1))$, only when:
+\[
+  \Var(g(X_1)) = \frac{1}{I(\theta)} \quad\Longleftrightarrow\quad \Var(\hat\theta) = \frac{1}{n\cdot I(\theta)} = \text{CRLB}.
+\]
+This three-way identity $\Var(g(X_1)) = 1/I(\theta) = n\cdot\Var(\hat\theta)$ holds \emph{if and only if} the MLE attains the Cramér-Rao bound. When the bound is not attained, the two approaches give different values of $\sigma$, and the MLE CLT (Approach 2) may not apply in its standard form.
+\end{tcolorbox}
+
+\textbf{Review-session worked example.}
+\begin{align*}
+  \text{Approach 1:}\quad& \hat\theta = \tfrac{1}{n}\textstyle\sum (X_i/3),\quad \sigma = \sqrt{\Var(X_1/3)} = \sqrt{\tfrac{3\theta^2}{9}} = \frac{\theta}{\sqrt{3}}.\\[4pt]
+  \text{Approach 2:}\quad& \sigma = \frac{1}{\sqrt{I(\theta)}} = \frac{1}{\sqrt{3/\theta^2}} = \frac{\theta}{\sqrt{3}}.
+\end{align*}
+$\boxed{\sigma = \theta/\sqrt{3}}$. Both agree, confirming the CR bound is attained.
+
+\newpage
+% ==============================================================
+\section{Worked Practice Problems}
+% ==============================================================
+
+\subsection*{Practice 1: Weibull$(2,\theta)$ — Likelihood}
+
+\textbf{Distribution.} $\xn \iid f(x;\theta) = \frac{2x}{\theta^2}\,e^{-x^2/\theta^2}$, $x>0$, $\theta>0$.
+
+\textbf{Key structural observation.} The exponent is $-x^2/\theta^2$ (not $-x/\theta$). This means:
+(1) the collapsed exponential in $L$ will be $e^{-\sum X_i^2/\theta^2}$, and
+(2) the correct u-substitution is $u = x^2/\theta^2$.
+
+\textbf{Likelihood:}
+\[
+  L(\theta) = \prod_{i=1}^n \frac{2X_i}{\theta^2}\,e^{-X_i^2/\theta^2}
+  = \frac{2^n}{\theta^{2n}}\cdot\prod_{i=1}^n X_i\cdot\exp\!\Bigl(-\frac{\textstyle\sum X_i^2}{\theta^2}\Bigr).
+\]
+
+\subsection*{Practice 2: Rayleigh$(\theta)$ --- MLE and Second Derivative}
+
+\textbf{Distribution.} $f(x;\theta) = \frac{2x}{\theta}\,e^{-x^2/\theta}$, $x>0$.
+(Note: parameter $\theta$ appears as $\theta$, not $\theta^2$, in the exponent — watch the powers carefully.)
+
+\textbf{Log-likelihood:}
+\[
+  \ell(\theta) = n\log 2 - n\log\theta + \sum\log X_i - \frac{\sum X_i^2}{\theta}.
+\]
+
+\textbf{Score equation $\ell'(\theta)=0$:}
+\[
+  \ell'(\theta) = -\frac{n}{\theta} + \frac{\sum X_i^2}{\theta^2} = 0
+  \quad\Longrightarrow\quad \hat\theta = \frac{\sum X_i^2}{n}.
+\]
+
+\textbf{Second derivative test:}
+\[
+  \ell''(\theta) = \frac{n}{\theta^2} - \frac{2\sum X_i^2}{\theta^3}.
+\]
+From the score equation: $\sum X_i^2 = n\hat\theta$. Therefore:
+\[
+  \ell''(\hat\theta) = \frac{n}{\hat\theta^2} - \frac{2n\hat\theta}{\hat\theta^3}
+  = \frac{n}{\hat\theta^2} - \frac{2n}{\hat\theta^2} = -\frac{n}{\hat\theta^2} < 0. \quad\checkmark
+\]
+
+\subsection*{Practice 3: Gamma$(3,\theta)$ — Full Q1–Q8 Chain}
+
+\textbf{Distribution.} $f(x;\theta) = \frac{x^2 e^{-x/\theta}}{2\theta^3}$, $x>0$. (Gamma with shape $\alpha=3$, scale $\theta$.)
+
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Quantity} & \textbf{Computation} & \textbf{Result} \\
+\midrule
+$L(\theta)$ & $\prod f(X_i;\theta)$ & $(2\theta^3)^{-n}\prod X_i^2 \cdot e^{-\sum X_i/\theta}$ \\[2pt]
+$\hat\theta$ & $\ell'(\theta)=0$ & $\bar X/3 = \sum X_i/(3n)$ \\[2pt]
+$\ell''(\hat\theta)$ & sub $\sum X_i=3n\hat\theta$ & $-3n/\hat\theta^2 < 0$ \checkmark \\[2pt]
+$\E[X_1]$ & $u=x/\theta$, row $n=3$ & $3\theta$ \\[2pt]
+$\Bias(\hat\theta,\theta)$ & $\E[\hat\theta]-\theta = \theta-\theta$ & $0$ (unbiased) \\[2pt]
+$\E[X_1^2]$ & $u=x/\theta$, row $n=4$ & $12\theta^2$ \\[2pt]
+$\Var(X_1)$ & $12\theta^2-(3\theta)^2$ & $3\theta^2$ \\[2pt]
+$\MSE(\hat\theta,\theta)$ & $\Var(X_1)/(9n)$ & $\theta^2/(3n)$ \\[2pt]
+Consistency & Chebyshev: $\theta^2/(3n\varepsilon^2)\to 0$ & $\hat\theta\convp\theta$ \\[2pt]
+$I(\theta)$ & $\Var(X_1)/\theta^4$ & $3/\theta^2$ \\[2pt]
+CRLB & $1/(nI(\theta))$ & $\theta^2/(3n)$ \\[2pt]
+Bound attained? & $\Var(\hat\theta)=$ CRLB & Yes — UMVUE \\[2pt]
+$\sigma$ (Q8) & $1/\sqrt{I(\theta)}$ & $\theta/\sqrt{3}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection*{Practice 4: Exponential$(\lambda)$ --- Fisher Information}
+
+\textbf{Distribution.} $f(x;\lambda) = \lambda\,e^{-\lambda x}$, $x>0$.
+
+\textbf{Score function:}
+\[
+  \log f = \log\lambda - \lambda X_1, \qquad
+  s(\lambda) = \frac{1}{\lambda} - X_1 = -(X_1 - \underbrace{\E[X_1]}_{=1/\lambda}).
+\]
+
+\textbf{Fisher information} (using the variance shortcut):
+\[
+  I(\lambda) = \Var(X_1) = \frac{1}{\lambda^2}.
+\]
+
+\textbf{CRLB and $\sigma$:}
+\[
+  \text{CRLB} = \frac{1}{n\cdot 1/\lambda^2} = \frac{\lambda^2}{n}, \qquad
+  \sigma = \frac{1}{\sqrt{I(\lambda)}} = \lambda.
+\]
+
+\subsection*{Practice 5: Uniform$(0,\theta)$ — Bound Not Attained}
+
+\textbf{Distribution.} $f(x;\theta)=1/\theta$, $0<x<\theta$. \textbf{Support depends on $\theta$} — regularity conditions fail.
+
+\textbf{MLE.} $L(\theta) = \theta^{-n}\mathbf{1}(X_{(n)}\leq\theta)$ is decreasing in $\theta$ for $\theta\geq X_{(n)}$, so $\hat\theta = X_{(n)}$.
+
+\textbf{Bias.} The pdf of $X_{(n)}$ is $f_{(n)}(x)=nx^{n-1}/\theta^n$. Then:
+\[
+  \E[X_{(n)}] = \frac{n}{\theta^n}\int_0^\theta x^n\,dx = \frac{n\theta}{n+1},
+  \qquad \Bias = -\frac{\theta}{n+1}.
+\]
+
+\textbf{Bias-corrected estimator.} $T^* = \frac{n+1}{n}X_{(n)}$ is unbiased. Its variance:
+\[
+  \Var(T^*) = \frac{\theta^2}{n(n+2)}.
+\]
+
+\textbf{Formal CRLB.} With $s(\theta)=-1/\theta$ (constant in $X_1$!) and $I(\theta)=1/\theta^2$:
+\[
+  \text{CRLB} = \frac{\theta^2}{n}.
+\]
+
+\textbf{Comparison.}
+\[
+  \Var(T^*) = \frac{\theta^2}{n(n+2)} < \frac{\theta^2}{n} = \text{CRLB}.
+\]
+$T^*$ \textbf{beats the formal CRLB} — possible only because the regularity conditions fail. The bound is not a valid lower bound for this model.
+
+\newpage
+% ==============================================================
+\section{Consistency: Two Approaches Compared}
+% ==============================================================
+
+Both approaches prove $\hat\theta\convp\theta$ but differ in what they require.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{@{}p{3.2cm}p{5.5cm}p{5.5cm}@{}}
+\toprule
+& \textbf{Law of Large Numbers} & \textbf{Chebyshev / MSE} \\
+\midrule
+Best when & $\hat\theta = (1/n)\sum g(X_i)$ & MSE already computed (Q4 done) \\
+Requires & $\E[g(X_1)]=\theta$; $\E[|g(X_1)|]<\infty$ & $\MSE(\hat\theta,\theta)\to 0$ \\
+Key step & LLN: $(1/n)\sum g(X_i)\convp \E[g(X_1)]=\theta$ & $P(|\hat\theta-\theta|\geq\varepsilon)\leq\MSE/\varepsilon^2\to 0$ \\
+Fails when & $\hat\theta$ not an average (e.g.\ $X_{(n)}$, ratio) & $\MSE$ doesn't vanish \\
+Example & $\hat\theta=\bar X/3 = (1/n)\sum(X_i/3)$ & $\hat\theta=\sqrt{\sum X_i^2/n}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{tcolorbox}[infobox]
+\textbf{Panaretos Remark 3.8:} MSE$(\hat\theta,\theta)\to 0$ implies $\hat\theta\convp\theta$. Therefore if you've computed MSE in Q4 and it goes to zero, consistency (Q5) is essentially already proven.
+\end{tcolorbox}
+
+% ==============================================================
+\section{The Three-Way Identity}
+% ==============================================================
+
+When the CR bound is attained, the following quantities are all equal:
+\[
+  \boxed{\Var(g(X_1)) \;=\; \frac{1}{I(\theta)} \;=\; n\cdot\Var(\hat\theta) \;=\; n\cdot\text{CRLB} \;=\; \sigma^2}
+\]
+This identity simultaneously explains why:
+\begin{enumerate}[leftmargin=2em]
+  \item The classical CLT and the MLE CLT give the \emph{same} $\sigma$ for Q8.
+  \item The UMVUE achieves the exact lower bound.
+  \item $\hat\theta$ is an \emph{efficient} estimator.
+\end{enumerate}
+When the bound is \emph{not} attained (e.g.\ Uniform$(0,\theta)$), the identity breaks, the two CLT routes diverge, and the standard MLE CLT no longer applies.
+
+\newpage
+% ==============================================================
+\section{Mock Exam: Weibull$(2,\theta)$ — Full Q1--Q8}
+% ==============================================================
+
+\begin{tcolorbox}[questionbox, title={Instructions}]
+$X_1,\ldots,X_n \iid f(x;\theta) = \frac{2x}{\theta^2}\,e^{-x^2/\theta^2}$, $x>0$, $\theta>0$. Work all eight questions. The formula sheet in Section 1 is available.
+\end{tcolorbox}
+
+\subsection{Likelihood $L(\theta)$}
+
+Write and simplify $L(\theta) = \prod_{i=1}^n f(X_i;\theta)$.
+
+\vspace{120pt}
+
+\textbf{Solution.}
+\[
+  L(\theta) = \frac{2^n}{\theta^{2n}}\cdot\prod_{i=1}^n X_i\cdot\exp\!\Bigl(-\frac{\textstyle\sum X_i^2}{\theta^2}\Bigr).
+\]
+Group: $(2/\theta^2)^n$ from the constant; $\prod X_i$ from the data; $\exp(-\sum X_i^2/\theta^2)$ from collapsing the exponentials.
+
+\subsection{MLE $\hat\theta$ and second derivative test}
+
+\vspace{120pt}
+
+\textbf{Solution.}
+\begin{align*}
+  \ell(\theta) &= n\log 2 - 2n\log\theta + \sum\log X_i - \frac{\sum X_i^2}{\theta^2}.\\
+  \ell'(\theta) &= -\frac{2n}{\theta} + \frac{2\sum X_i^2}{\theta^3} = 0
+  \quad\Longrightarrow\quad \hat\theta = \sqrt{\frac{\sum X_i^2}{n}}.\\
+  \ell''(\theta) &= \frac{2n}{\theta^2} - \frac{6\sum X_i^2}{\theta^4}.
+\end{align*}
+From score equation: $\sum X_i^2 = n\hat\theta^2$. Then:
+$\ell''(\hat\theta) = 2n/\hat\theta^2 - 6n/\hat\theta^2 = -4n/\hat\theta^2 < 0$. $\checkmark$
+
+\subsection{Bias via $\E[X_1^2]$}
+
+\vspace{120pt}
+
+\textbf{Solution.} The natural unbiased estimator is $\tilde\theta^2 = \sum X_i^2/n$ for the target $\theta^2$. Compute:
+\[
+  \E[X_1^2] = \frac{2}{\theta^2}\int_0^\infty x^3 e^{-x^2/\theta^2}\,dx.
+\]
+Substitute $u = x^2/\theta^2$, so $x^2=\theta^2 u$ and $2x\,dx = \theta^2\,du$, i.e.\ $x^3\,dx = \theta^2 u \cdot \frac{\theta^2}{2}\,du = \frac{\theta^4}{2}u\,du$:
+\[
+  \E[X_1^2] = \frac{2}{\theta^2}\cdot\frac{\theta^4}{2}\int_0^\infty u\,e^{-u}\,du = \theta^2\cdot 1 = \theta^2.
+\]
+Therefore $\E[\tilde\theta^2] = \theta^2$, so $\Bias(\tilde\theta^2,\theta^2) = 0$.
+
+\subsection{MSE of $\tilde\theta^2$}
+
+\vspace{100pt}
+
+\textbf{Solution.}
+\[
+  \E[X_1^4] = \frac{2}{\theta^2}\int_0^\infty x^5 e^{-x^2/\theta^2}\,dx.
+\]
+Same substitution: $x^5\,dx = (x^2)^2 x\,dx = \theta^4u^2\cdot\frac{\theta^2}{2}\,du = \frac{\theta^6}{2}u^2\,du$.
+\[
+  \E[X_1^4] = \frac{2}{\theta^2}\cdot\frac{\theta^6}{2}\cdot 2! = 2\theta^4.
+\]
+\[
+  \Var(X_1^2) = 2\theta^4 - (\theta^2)^2 = \theta^4, \qquad
+  \Var(\tilde\theta^2) = \frac{\theta^4}{n}, \qquad
+  \MSE(\tilde\theta^2,\theta^2) = \boxed{\frac{\theta^4}{n}}.
+\]
+
+\subsection{Consistency of $\tilde\theta^2$}
+
+\vspace{80pt}
+
+\textbf{Solution.}\\[4pt]
+\textit{LLN:} $\tilde\theta^2 = (1/n)\sum X_i^2 \convp \E[X_1^2] = \theta^2$. $\checkmark$\\[4pt]
+\textit{Chebyshev:} $P(|\tilde\theta^2-\theta^2|\geq\varepsilon)\leq \theta^4/(n\varepsilon^2)\to 0$. $\checkmark$
+
+\subsection{Fisher Information $I(\theta)$}
+
+\vspace{100pt}
+
+\textbf{Solution.}
+\[
+  \log f = \log 2 + \log x - 2\log\theta - \frac{x^2}{\theta^2},\qquad
+  s(\theta) = -\frac{2}{\theta} + \frac{2X_1^2}{\theta^3} = \frac{2}{\theta^3}(X_1^2 - \theta^2).
+\]
+Since $\E[X_1^2]=\theta^2$, the score is $(2/\theta^3)(X_1^2 - \E[X_1^2])$:
+\[
+  I(\theta) = \frac{4}{\theta^6}\Var(X_1^2) = \frac{4}{\theta^6}\cdot\theta^4 = \frac{4}{\theta^2}.
+\]
+
+\subsection{Does $\tilde\theta^2$ attain the CR bound?}
+
+\vspace{80pt}
+
+\textbf{Solution.} Estimating $g(\theta)=\theta^2$, so $g'(\theta)=2\theta$:
+\[
+  \text{CRLB} = \frac{[g'(\theta)]^2}{n\cdot I(\theta)} = \frac{4\theta^2}{n\cdot 4/\theta^2} = \frac{\theta^4}{n}.
+\]
+Since $\Var(\tilde\theta^2) = \theta^4/n = \text{CRLB}$, the bound \textbf{is attained}. $\tilde\theta^2$ is the UMVUE for $\theta^2$.
+
+\subsection{Asymptotic Normality — find $\sigma$}
+
+\vspace{80pt}
+
+\textbf{Solution.}\\[4pt]
+\textit{Approach 1 (Classical CLT):} $\tilde\theta^2 = (1/n)\sum X_i^2$, so $Y_i=X_i^2$ are i.i.d.\ with $\Var(Y_1)=\theta^4$.
+\[
+  \sigma = \sqrt{\Var(X_1^2)} = \theta^2.
+\]
+\textit{Approach 2 (MLE CLT):} $\sigma = g'(\theta)/\sqrt{I(\theta)} = 2\theta/\sqrt{4/\theta^2} = 2\theta\cdot\theta/2 = \theta^2$.\\[4pt]
+Both agree: $\boxed{\sigma = \theta^2}$, consistent with the CR bound being attained.
+
+\newpage
+% ==============================================================
+\section{Quick Reference Summary}
+% ==============================================================
+
+\begin{tcolorbox}[formulabox]
+\textbf{Q1 — Likelihood:}
+$L(\theta) = c(\theta)^n \cdot \prod g(X_i) \cdot \exp\!\bigl(-h(\textstyle\sum X_i^k)/\theta^m\bigr)$
+
+\medskip
+\textbf{Q2 — MLE:}
+$\ell'(\hat\theta)=0$; substitute $\sum(\text{data})=n\cdot g(\hat\theta)$ into $\ell''(\hat\theta)$ to show $<0$.
+
+\medskip
+\textbf{Q3 — Bias:}
+$\Bias = \E[\hat\theta]-\theta$; reduce to $\E[X_1]$ via linearity; u-sub $u=x/\theta$ or $u=x^2/\theta^2$; use $\int_0^\infty u^n e^{-u}\,du = n!$
+
+\medskip
+\textbf{Q4 — MSE:}
+$\MSE = \Bias^2 + \Var(\hat\theta)$; $\Var(\hat\theta) = \Var(X_1)/(c^2 n)$; need $\E[X_1^2]$ (one row higher in table).
+
+\medskip
+\textbf{Q5 — Consistency:}
+LLN if $\hat\theta=(1/n)\sum g(X_i)$ and $\E[g(X_1)]=\theta$; or Chebyshev if MSE$\to 0$.
+
+\medskip
+\textbf{Q6 — Fisher info:}
+$I(\theta)=\Var(s(\theta))$ where $s=\pd{}{\theta}\log f(X_1;\theta)$; shortcut: if $s=(X_1-\E[X_1])/c(\theta)$ then $I(\theta)=\Var(X_1)/c(\theta)^2$.
+
+\medskip
+\textbf{Q7 — CR bound:}
+CRLB $= 1/(nI(\theta))$ for unbiased estimators; $[g'(\theta)]^2/(nI(\theta))$ for estimating $g(\theta)$. Attained iff $\Var(\hat\theta)=$CRLB. If support depends on $\theta$: regularity fails, bound may be invalid.
+
+\medskip
+\textbf{Q8 — Asymptotic normality:}
+Classical CLT: $\sigma=\sqrt{\Var(g(X_1))}$. MLE CLT: $\sigma=1/\sqrt{I(\theta)}$. These agree iff bound attained.
+\end{tcolorbox}
+
+\bigskip
+
+\begin{tcolorbox}[warnbox, title={Exam checklist}]
+\begin{enumerate}[leftmargin=2em, itemsep=2pt]
+  \item[$\square$] $L(\theta)$: grouped correctly? Exponent collapsed to $\exp(-\sum X_i^k/\theta^m)$?
+  \item[$\square$] MLE: second derivative test done and $\ell''(\hat\theta) < 0$ shown explicitly?
+  \item[$\square$] Bias: u-substitution tracks all four pieces (substitution, $x^k$, $e^{-(\cdot)}$, $dx$)?
+  \item[$\square$] MSE: $n$ appears in the denominator?
+  \item[$\square$] Consistency: stated the conclusion "$\hat\theta\convp\theta$" explicitly?
+  \item[$\square$] Fisher info: used $\E[s(\theta)]=0$ so $I(\theta)=\Var(s)$? No new integrals?
+  \item[$\square$] CR bound: computed CRLB; stated whether attained; cited regularity if not?
+  \item[$\square$] Q8: wrote both CLT approaches; confirmed they agree; stated $\sigma$ clearly?
+\end{enumerate}
+\end{tcolorbox}
+
+\end{document}
