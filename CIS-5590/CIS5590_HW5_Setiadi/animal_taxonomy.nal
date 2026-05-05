@@ -1,0 +1,27 @@
+# Mini-NARS Sample Experience: Animal Taxonomy
+# Based on the example in Chapter 4 of "Designing a Mind"
+
+# Input some initial knowledge
+<bird --> animal>. %1.0;0.9%
+<robin --> bird>. %1.0;0.9%
+
+# Run 5 inference cycles to process
+5
+
+# Now ask a question: can the system derive robin -> animal?
+<robin --> animal>?
+
+# Run more cycles to find the answer
+20
+
+# More knowledge
+<fish --> animal>. %1.0;0.9%
+<salmon --> fish>. %1.0;0.9%
+<penguin --> bird>. %1.0;0.9%
+<penguin --> swimmer>. %1.0;0.9%
+
+10
+
+# Query
+<salmon --> animal>?
+20
